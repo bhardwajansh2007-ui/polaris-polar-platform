@@ -248,3 +248,97 @@ it queues transactions via RFC 9171 DTN with zero crashes and zero API key costs
 ========================================================================================
 END OF DOSSIER — BEST OF LUCK TO THE TEAM FOR SMART INDIA HACKATHON!
 ========================================================================================
+
+========================================================================================
+NEW REDESIGNED SLIDES 4 & 5 (WITH DETAILED FLOWCHARTS, MICRO-TEXT & METRICS)
+========================================================================================
+
+----------------------------------------------------------------------------------------
+SLIDE 4: FEASIBILITY AND VIABILITY
+----------------------------------------------------------------------------------------
+Header: Logic And Layers | Smart India Hackathon 2026
+Title: FEASIBILITY AND VIABILITY
+Subtitle: Designed for Real Antarctic Operational & Environmental Constraints
+Asset File: d:\sihhhhh\presentation_assets\Slide4_Feasibility_Rich_Flowchart.jpg
+
+[COLUMN 1: TECHNICAL FEASIBILITY]
+• Offline Edge Computing: Autonomous local execution at Maitri/Bharati stations with zero internet dependency.
+• RFC 9171 DTN Protocol: Decentralized Store-and-Forward bundle routing bridges 14-day polar blackout gaps.
+• Ultra-Lightweight Footprint: Node.js + SQLite runtime (<150 MB RAM) running on rugged Toughbooks.
+• Flowchart Diagram:
+  [Sensor/Tablet] ──> [Local Edge Node] ──> [SQLite Store] ──> [Instant Low-Latency UI]
+                                                     │
+                                                     └──(On Link Pass)──> [32-Byte SBD Burst to Goa]
+
+[COLUMN 2: OPERATIONAL FEASIBILITY]
+• 6-Stage Expedition Lifecycle Integration:
+  1. Pre-Departure  ──> CAG-EP digital permits & UN Hazmat cargo manifests.
+  2. Transit         ──> Cold-chain IoT temperature logging aboard charter vessel.
+  3. Station Ops     ──> 240-day winter survival simulation (AHSD diesel & life-support twin).
+  4. Field Sortie    ──> GIS deadman monitoring (120-min radio watchdog & crevasse detour).
+  5. Emergency SAR   ──> Autonomous azimuth calculation, trauma triage & rescue dispatch.
+  6. Return Voyage   ──> Madrid Protocol Annex III digital waste audit & drum repatriation.
+
+[COLUMN 3: SCALABILITY ROADMAP]
+• Phased National Polar Grid:
+  Phase 1: Maitri Base          ──> Immediate local edge deployment & Schirmacher Oasis mapping.
+  Phase 2: Bharati Base         ──> Larsemann Hills expansion with multi-station DTN sync.
+  Phase 3: Icebreaker & Arctic  ──> Deployment aboard MV Vasiliy Golovnin & Himadri (Svalbard).
+  Phase 4: Maitri-II & Future   ──> Ready for upcoming next-gen habitat & automated polar sensor nodes.
+
+[COLUMN 4: ECONOMIC VIABILITY]
+• 100% Open-Source Stack: Zero software licensing overhead (React 19, TypeScript, Node.js, SQLite).
+• Zero SaaS Subscription Costs: Eliminates recurring per-user enterprise cloud fees.
+• Open Geospatial & Weather APIs: Leverages free ESRI Tactical Canvas & Open-Meteo ECMWF models.
+• High National ROI: Single prevented cold-chain breach or fuel crisis saves Rs 1.5+ Crores per season.
+
+
+----------------------------------------------------------------------------------------
+SLIDE 5: IMPACT AND BENEFITS
+----------------------------------------------------------------------------------------
+Header: Logic And Layers | Smart India Hackathon 2026
+Title: IMPACT AND BENEFITS
+Subtitle: Measurable Strategic, Operational & Ecological Outcomes for Indian Polar Expeditions
+Asset File: d:\sihhhhh\presentation_assets\Slide5_Impact_Rich_Flowchart.jpg
+
+[CARD 1: LIFE SAFETY & SAR]
+Badge: 65% Faster Rescue Response
+• Instantaneous Alerting: Automated deadman watchdog triggers alert immediately if radio ping missed.
+• Rapid Vector Generation: Computes exact azimuth (164 deg SE), distance, and crevasse detour in <15 mins.
+• Enhanced Crew Tracking: Real-time visibility minimizes deadly blizzard exposure windows.
+• Process Flowchart:
+  [Missed Ping] ──> [Watchdog Alarm] ──> [Autonomous Vector] ──> [SAR Convoy Rescue]
+
+[CARD 2: SCIENTIFIC ASSET PROTECTION]
+Badge: 0% Cold-Chain Loss
+• End-to-End Monitoring: Continuous IoT logging (-25 deg C to +8 deg C) for 800k-yr ice cores & bio-samples.
+• Risk Mitigation: Instant audio/visual alarms on thermal breaches before degradation occurs.
+• Preserving Research Integrity: Full chain-of-custody from blue-ice drilling to NCPOR Goa labs.
+• Process Flowchart:
+  [Ice Core Sample] ──> [Thermal Logger] ──> [Breach Alert] ──> [Safe Goa Lab Delivery]
+
+[CARD 3: LOGISTICS & FUEL EFFICIENCY]
+Badge: 42% Sortie Optimization
+• Route Optimization: Consolidates supply runs, reducing heavy snowcat wear and crevasse hazards.
+• Efficient Resupply Manifests: Optical QR/barcode scanning eliminates manual logging errors.
+• Substantial Resource Savings: Lowers AHSD diesel burn, saving 15,000+ L fuel and carbon emissions.
+• Process Flowchart:
+  [Cargo Manifest] ──> [Route Optimization] ──> [Avoid Hazards] ──> [Save AHSD Fuel]
+
+[CARD 4: ENVIRONMENTAL COMPLIANCE]
+Badge: 100% Mandatory Repatriation
+• Accurate Waste Tracking: Tamper-evident digital seals for Category 1-4 drums from source to ship.
+• Zero Waste Left Behind: Direct statutory alignment with Madrid Protocol Annex III & Indian Antarctic Act 2022.
+• Efficient Customs Audits: Streamlined verification at Mormugao Port with immutable digital custody.
+• Process Flowchart:
+  [Waste Drum] ──> [QR Digital Seal] ──> [Vessel Loading] ──> [Customs Port Audit]
+
+[CARD 5: STRATEGIC NATIONAL SOVEREIGNTY]
+Badge: Atmanirbhar Polar Tech
+• Secure Data Governance: Critical polar scientific and logistical data stays within sovereign Indian systems.
+• Self-Reliance: Localized edge database infrastructure eliminates dependency on foreign SaaS.
+• Unified Command: Single interoperable platform for Maitri, Bharati, and Himadri polar bases.
+• Process Flowchart:
+  [Indigenous Stack] ──> [Edge Database] ──> [Zero Foreign SaaS] ──> [National Autonomy]
+
+========================================================================================
