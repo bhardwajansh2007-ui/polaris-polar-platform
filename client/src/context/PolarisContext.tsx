@@ -78,9 +78,17 @@ interface PolarisContextType {
 const PolarisContext = createContext<PolarisContextType | undefined>(undefined);
 
 export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [station, setStation] = useState<PolarStation>('Maitri');
+  const [station, setStation] = useState<PolarStation>(() => {
+    const saved = localStorage.getItem('polaris_station');
+    return (saved as PolarStation) || 'Maitri';
+  });
+
   const [role, setRole] = useState<UserRole>('STATION_COMMANDER');
-  const [networkMode, setNetworkMode] = useState<NetworkMode>('ONLINE_HIGH_SPEED');
+
+  const [networkMode, setNetworkMode] = useState<NetworkMode>(() => {
+    const saved = localStorage.getItem('polaris_network_mode');
+    return (saved as NetworkMode) || 'ONLINE_HIGH_SPEED';
+  });
 
   // Stored state with local storage fallback
   const [cargo, setCargo] = useState<CargoItem[]>(() => {
@@ -122,6 +130,15 @@ export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [activeAlert, setActiveAlert] = useState<string | null>(null);
 
+  // Sync station and network mode across reloads
+  useEffect(() => {
+    localStorage.setItem('polaris_station', station);
+  }, [station]);
+
+  useEffect(() => {
+    localStorage.setItem('polaris_network_mode', networkMode);
+  }, [networkMode]);
+
   // Sync to local storage for persistence across reloads
   useEffect(() => {
     localStorage.setItem('polaris_cargo', JSON.stringify(cargo));
@@ -151,7 +168,28 @@ export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ child
     localStorage.setItem('polaris_sync_queue', JSON.stringify(syncQueue));
   }, [syncQueue]);
 
-  // Queue an offline event if not online
+  // 1. Initial State Fetch from On-Station Edge Database Server
+  useEffect(() => {
+    fetch('/api/state')
+      .then(res => {
+        if (res.ok) return res.json();
+        throw new Error('Server unreachable');
+      })
+      .then(store => {
+        if (store.cargo && store.cargo.length > 0) setCargo(store.cargo);
+        if (store.sorties && store.sorties.length > 0) setSorties(store.sorties);
+        if (store.lifeSupport) setLifeSupport(store.lifeSupport);
+        if (store.permits && store.permits.length > 0) setPermits(store.permits);
+        if (store.wasteRecords && store.wasteRecords.length > 0) setWasteRecords(store.wasteRecords);
+        if (store.emergencies && store.emergencies.length > 0) setEmergencies(store.emergencies);
+        console.log('[POLARIS] Database synchronized with On-Premise Station Edge Core.');
+      })
+      .catch(() => {
+        console.log('[POLARIS] Operating autonomously from Station LocalStorage cache.');
+      });
+  }, []);
+
+  // Queue an offline event or transmit to edge server
   const enqueueAction = (entity: SyncQueueItem['entity'], action: SyncQueueItem['action'], payload: any) => {
     const packetSize = Math.floor(JSON.stringify(payload).length * 1.2);
     const item: SyncQueueItem = {
@@ -166,6 +204,19 @@ export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     if (networkMode === 'ONLINE_HIGH_SPEED') {
       setBytesTransferred(prev => prev + packetSize);
+      // Persist directly to station edge server JSON store
+      fetch('/api/sync/dtn-burst', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bundles: [item],
+          senderStation: station,
+          networkMode
+        })
+      }).catch(() => {
+        // Fallback to queue if server network fails
+        setSyncQueue(prev => [item, ...prev]);
+      });
     } else {
       setSyncQueue(prev => [item, ...prev]);
     }
@@ -173,21 +224,41 @@ export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Automated sync drainage when returning to online or triggering manual satellite burst
   const manualTriggerSync = () => {
-    if (syncQueue.length === 0) return;
+    const pendingBundles = syncQueue.filter(q => q.status === 'PENDING_SATELLITE_WINDOW');
+    if (pendingBundles.length === 0) return;
     setIsSyncing(true);
 
-    const pendingBytes = syncQueue
-      .filter(q => q.status === 'PENDING_SATELLITE_WINDOW')
-      .reduce((acc, curr) => acc + curr.packetSizeBytes, 0);
+    const pendingBytes = pendingBundles.reduce((acc, curr) => acc + curr.packetSizeBytes, 0);
 
-    setTimeout(() => {
-      setSyncQueue(prev =>
-        prev.map(item => ({ ...item, status: 'TRANSMITTED' }))
-      );
-      setBytesTransferred(prev => prev + pendingBytes);
-      setIsSyncing(false);
-      setActiveAlert(`Delay-Tolerant Bundle Sync Complete: ${pendingBytes} bytes flushed over satellite link.`);
-    }, 1200);
+    fetch('/api/sync/dtn-burst', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        bundles: pendingBundles,
+        senderStation: station,
+        networkMode: 'ONLINE_HIGH_SPEED'
+      })
+    })
+      .then(res => res.json())
+      .then(() => {
+        setSyncQueue(prev =>
+          prev.map(item => ({ ...item, status: 'TRANSMITTED' }))
+        );
+        setBytesTransferred(prev => prev + pendingBytes);
+        setIsSyncing(false);
+        setActiveAlert(`Delay-Tolerant Bundle Sync Complete: ${pendingBytes} bytes written to edge database & flushed to Goa.`);
+      })
+      .catch(() => {
+        // Fallback timeout simulation if link simulated
+        setTimeout(() => {
+          setSyncQueue(prev =>
+            prev.map(item => ({ ...item, status: 'TRANSMITTED' }))
+          );
+          setBytesTransferred(prev => prev + pendingBytes);
+          setIsSyncing(false);
+          setActiveAlert(`Delay-Tolerant Bundle Sync Complete: ${pendingBytes} bytes flushed.`);
+        }, 1200);
+      });
   };
 
   // Simulated offline mission event to demonstrate RFC 9171 DTN queueing

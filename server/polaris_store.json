@@ -4,15 +4,104 @@
     "Bharati",
     "Himadri"
   ],
-  "cargo": [],
-  "sorties": [],
+  "cargo": [
+    {
+      "id": "CRG-TEST-999",
+      "name": "Deep Ice Core Vacuum Cylinder",
+      "category": "Scientific Reagents",
+      "stage": "STATION_BUNKER",
+      "weightKg": 85
+    },
+    {
+      "id": "CRG-44-001",
+      "trackingNumber": "ISEA-GOA-2026-F01",
+      "name": "Arctic High-Speed Diesel (AHSD Low Pour Point -50°C)",
+      "category": "Fuel & Hydrocarbons",
+      "quantity": 120,
+      "unit": "Drums (200L each)",
+      "weightKg": 20400,
+      "stage": "ICE_SHELF_DEPOT",
+      "storageLocation": "India Bay Shelf Fuel Dump Bravo",
+      "isColdChain": false,
+      "hazardClass": "UN 1202 Flammable Liquid",
+      "madridProtocolCode": "ANNEX-III-PETRO-2",
+      "expedition": "44th Indian Antarctic Expedition",
+      "qrCode": "POLARIS:CRG-44-001:AHSD:20400KG",
+      "updatedAt": "2026-09-14T14:03:10.958Z"
+    },
+    {
+      "id": "CRG-44-002",
+      "trackingNumber": "ISEA-GOA-2026-M01",
+      "name": "Trauma Blood Plasma & Cryo-Sera",
+      "category": "Medical & Pharmaceuticals",
+      "quantity": 12,
+      "unit": "Cryo Shippers",
+      "weightKg": 140,
+      "stage": "STATION_BUNKER",
+      "storageLocation": "Bharati Medical Ward Cryo-Safe",
+      "isColdChain": true,
+      "minTempC": 2,
+      "maxTempC": 8,
+      "currentTempC": 4.2,
+      "thermalViolationCount": 0,
+      "hazardClass": "Non-Hazardous Biological",
+      "expedition": "44th Indian Antarctic Expedition",
+      "qrCode": "POLARIS:CRG-44-002:MED:140KG",
+      "updatedAt": "2026-09-14T14:03:10.960Z"
+    },
+    {
+      "id": "CRG-44-003",
+      "trackingNumber": "ISEA-GOA-2026-E03",
+      "name": "Cummins NTA855 Polar GenSet Fuel Injector Assembly",
+      "category": "Station Spares & HVAC",
+      "quantity": 4,
+      "unit": "Sealed Wooden Crates",
+      "weightKg": 380,
+      "stage": "STATION_BUNKER",
+      "storageLocation": "Maitri Heavy Spares Bunk Bay 1",
+      "isColdChain": false,
+      "hazardClass": "Non-Hazardous Mechanical",
+      "expedition": "44th Indian Antarctic Expedition",
+      "qrCode": "POLARIS:CRG-44-003:GENPART:380KG",
+      "updatedAt": "2026-09-14T14:03:10.960Z"
+    }
+  ],
+  "sorties": [
+    {
+      "id": "SRT-2026-08",
+      "missionName": "Wohlthat Mountain Paleoclimate Coring",
+      "station": "Maitri",
+      "teamLeader": "Dr. Rajesh Nair (Geologist, GSI)",
+      "scientists": [
+        "Dr. Rajesh Nair",
+        "Sanjay Kumar (IMD)",
+        "Vikram Singh (Survey of India)"
+      ],
+      "vehicle": "PistenBully 300 Polar",
+      "purpose": "Glaciological Coring",
+      "departureTime": "2026-09-14T10:03:10.960Z",
+      "expectedReturnTime": "2026-09-14T18:03:10.960Z",
+      "status": "IN_FIELD",
+      "vhfFrequency": "143.850 MHz (Ch 04)",
+      "targetCoordinates": {
+        "lat": -71.35,
+        "lng": 12.3,
+        "elevationM": 1650,
+        "zoneName": "Wohlthat Mountains Camp Delta"
+      },
+      "survivalRationsDays": 14,
+      "emergencyBeaconId": "EPIRB-MAITRI-PB02",
+      "lastCheckinTime": "2026-09-14T14:03:10.960Z",
+      "notes": "En route to drilling site; route following safe blue-ice corridor Bravo."
+    }
+  ],
   "lifeSupport": {
     "Maitri": {
       "station": "Maitri",
-      "externalTempC": -21,
-      "windSpeedKnots": 20,
-      "windChillC": -30.5,
-      "blizzardCategory": "Condition 3 (Alert)",
+      "externalTempC": -34.5,
+      "windSpeedKnots": 28,
+      "windChillC": -48.2,
+      "blizzardCategory": "Condition 2 (Warning)",
       "ahsdFuelLiters": 95000,
       "ahsdCapacityLiters": 120000,
       "jetA1FuelLiters": 18000,
@@ -51,10 +140,10 @@
     },
     "Bharati": {
       "station": "Bharati",
-      "externalTempC": -18.6,
-      "windSpeedKnots": 2,
-      "windChillC": -23.2,
-      "blizzardCategory": "Clear",
+      "externalTempC": -28,
+      "windSpeedKnots": 32,
+      "windChillC": -42,
+      "blizzardCategory": "Condition 3 (Alert)",
       "ahsdFuelLiters": 145000,
       "ahsdCapacityLiters": 180000,
       "jetA1FuelLiters": 22000,
@@ -85,9 +174,9 @@
     },
     "Himadri": {
       "station": "Himadri",
-      "externalTempC": 6.5,
-      "windSpeedKnots": 8,
-      "windChillC": 2.8,
+      "externalTempC": -14,
+      "windSpeedKnots": 15,
+      "windChillC": -21,
       "blizzardCategory": "Clear",
       "ahsdFuelLiters": 32000,
       "ahsdCapacityLiters": 40000,
@@ -110,12 +199,89 @@
       "winterDaysRemaining": 90
     }
   },
-  "permits": [],
-  "wasteRecords": [],
-  "emergencies": [],
+  "permits": [
+    {
+      "permitId": "CAG-EP-2026-IND-01",
+      "applicantName": "Dr. P. K. Srivastava (Chief Geologist)",
+      "institution": "Geological Survey of India (GSI)",
+      "projectTitle": "Petrological & Isotopic Dating of Schirmacher Oasis Nunatak Gneisses",
+      "actSection": "Section 6(1)(a) & 7(2) — Scientific Research Expedition",
+      "aspaPermitRequired": true,
+      "specimenCollectionAllowed": true,
+      "status": "CAG-EP_APPROVED",
+      "validFrom": "2026-01-01",
+      "validTo": "2027-03-31",
+      "clearanceOfficer": "Dr. M. Ravichandran (Secy MoES)"
+    },
+    {
+      "permitId": "CAG-EP-2026-IND-02",
+      "applicantName": "Dr. Ananya Mukherjee (Scientist E)",
+      "institution": "National Centre for Polar and Ocean Research (NCPOR)",
+      "projectTitle": "Sub-Glacial Lake Sediment Coring & Extremophilic Microbiome Bioprospecting",
+      "actSection": "Section 7(1) — Specimen Extraction & Mineral Assessment Prohibition",
+      "aspaPermitRequired": false,
+      "specimenCollectionAllowed": true,
+      "status": "CAG-EP_APPROVED",
+      "validFrom": "2026-02-01",
+      "validTo": "2026-12-31",
+      "clearanceOfficer": "Director NCPOR"
+    }
+  ],
+  "wasteRecords": [
+    {
+      "id": "WST-2026-001",
+      "manifestId": "MADRID-ANNEX-III-44-01",
+      "station": "Maitri",
+      "category": "Category 3: Hazardous/Fuel Sludge/Batteries",
+      "drumCount": 14,
+      "weightKg": 2800,
+      "storageBunker": "Maitri Hazardous Waste Bunker Bay 2",
+      "sealNumber": "IND-ANT-SEAL-88412",
+      "disposalPlan": "MANDATORY_REPATRIATION_INDIA",
+      "status": "BUNKERED_STATION",
+      "certifiedOfficer": "Environmental Officer Dr. S. K. Roy",
+      "dateLogged": "2026-02-14"
+    },
+    {
+      "id": "WST-2026-002",
+      "manifestId": "MADRID-ANNEX-III-44-02",
+      "station": "Bharati",
+      "category": "Category 2: Solid Waste/Metals/Plastics",
+      "drumCount": 22,
+      "weightKg": 1950,
+      "storageBunker": "Bharati Compacted Bale Staging Hangar",
+      "sealNumber": "IND-ANT-SEAL-91044",
+      "disposalPlan": "MANDATORY_REPATRIATION_INDIA",
+      "status": "LOADED_ON_ICEBREAKER",
+      "certifiedOfficer": "Logistics Lead K. V. Sharma",
+      "dateLogged": "2026-02-18"
+    }
+  ],
+  "emergencies": [
+    {
+      "id": "EMG-2026-001",
+      "timestamp": "2026-09-14T12:03:10.960Z",
+      "station": "Maitri",
+      "severity": "CRITICAL_LEVEL_1",
+      "type": "CREVASSE_FALL",
+      "reportedBy": "Field Party Charlie via VHF Ch 04",
+      "coordinates": {
+        "lat": -70.92,
+        "lng": 11.85,
+        "area": "Schirmacher Shear Zone Glacial Crevasse Line 4"
+      },
+      "personnelInvolved": [
+        "Dr. Vikram Singh",
+        "R. K. Meena"
+      ],
+      "status": "ACTIVE_DISPATCH",
+      "rescuePlanSummary": "Sno-Cat PB-02 mobilized with winch crane; heading 164° True SE, distance 22.4 km.",
+      "satelliteBurstSent": true
+    }
+  ],
   "dtnTelemetry": {
-    "totalBytesSynced": 0,
-    "activeBursts": 0,
-    "lastSyncTimestamp": "2026-09-13T17:31:33.184Z"
+    "totalBytesSynced": 319,
+    "activeBursts": 1,
+    "lastSyncTimestamp": "2026-09-14T14:03:42.375Z"
   }
 }
