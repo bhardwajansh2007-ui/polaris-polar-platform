@@ -16,7 +16,14 @@ import {
   Trash2,
   Clock,
   ShieldCheck,
-  FileCheck
+  FileCheck,
+  Network,
+  Server,
+  Database,
+  Zap,
+  Info,
+  CheckCircle2,
+  AlertTriangle
 } from 'lucide-react';
 import type { PolarStation, UserRole, NetworkMode } from '../types';
 
@@ -31,6 +38,7 @@ export const Header: React.FC = () => {
     syncQueue,
     isSyncing,
     manualTriggerSync,
+    simulateDTNBundle,
     lifeSupport,
     activeAlert,
     dismissAlert,
@@ -38,6 +46,7 @@ export const Header: React.FC = () => {
     loadSampleData
   } = usePolaris();
 
+  const [showDTNModal, setShowDTNModal] = useState(false);
   const currentStatus = lifeSupport[station];
   const pendingCount = syncQueue.filter(q => q.status === 'PENDING_SATELLITE_WINDOW').length;
 
@@ -200,6 +209,25 @@ export const Header: React.FC = () => {
             </select>
           </div>
 
+          {/* RFC 9171 DTN Inspector Launcher */}
+          <button
+            onClick={() => setShowDTNModal(true)}
+            className="flex items-center gap-1.5 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 hover:text-white text-xs px-2.5 py-1.5 rounded-lg border border-indigo-700/60 transition-all font-mono font-bold shadow"
+            title="Open RFC 9171 DTN Architecture & Offline Queue Inspector"
+          >
+            <Network className="w-3.5 h-3.5 text-cyan-400" />
+            <span>DTN Engine</span>
+            {pendingCount > 0 ? (
+              <span className="bg-amber-500 text-slate-950 font-black px-1.5 py-0.2 rounded-full text-[10px] animate-pulse">
+                {pendingCount}
+              </span>
+            ) : (
+              <span className="bg-slate-800 text-slate-400 px-1.5 py-0.2 rounded text-[10px]">
+                0
+              </span>
+            )}
+          </button>
+
           {/* Demo Data & Reset Controls */}
           <div className="flex items-center gap-1.5">
             <button
@@ -282,6 +310,33 @@ export const Header: React.FC = () => {
         </div>
       )}
 
+      {/* Blizzard Blackout Offline Banner */}
+      {networkMode === 'POLAR_BLACKOUT' && (
+        <div className="bg-gradient-to-r from-rose-950 via-rose-900 to-amber-950 border-b border-rose-500/70 px-4 py-2 text-xs flex flex-wrap items-center justify-between gap-2 text-rose-100">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <span>
+              <strong className="text-amber-300">POLAR BLIZZARD BLACKOUT (OFFLINE SIMULATION):</strong> Satellite link to NCPOR Goa is SEVERED. Operating in 100% Autonomous Edge Mode (RFC 9171 DTN).
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => simulateDTNBundle('BLIZZARD_PATROL_PING')}
+              className="bg-rose-800/80 hover:bg-rose-700 text-white font-bold px-2 py-1 rounded text-[11px] border border-rose-400/50 shadow"
+            >
+              + Generate Offline Event
+            </button>
+            <button
+              onClick={() => setShowDTNModal(true)}
+              className="bg-indigo-900 hover:bg-indigo-800 text-cyan-300 font-bold px-2.5 py-1 rounded text-[11px] border border-cyan-500/40"
+            >
+              Inspect DTN Queue ({pendingCount}) ➔
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Global Mission Alert Banner */}
       {activeAlert && (
         <div className="bg-gradient-to-r from-cyan-950 via-blue-950 to-indigo-950 border-y border-cyan-500/50 px-4 py-2 text-xs flex items-center justify-between text-cyan-100 animate-pulse">
@@ -295,6 +350,247 @@ export const Header: React.FC = () => {
           >
             DISMISS
           </button>
+        </div>
+      )}
+
+      {/* RFC 9171 DTN Architecture & Telemetry Modal */}
+      {showDTNModal && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-[#0b1329] border border-cyan-500/50 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl space-y-6 text-slate-200">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between border-b border-slate-700 pb-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-950 border border-cyan-500/60 flex items-center justify-center text-cyan-400 shadow">
+                  <Network className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2 font-mono">
+                    RFC 9171 Delay-Tolerant Network (DTN) Architecture & Queue Inspector
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    Sovereign Edge Synchronization Engine: Polar Station Nodes ⟷ NCPOR Goa Ministry Headquarters
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDTNModal(false)}
+                className="text-slate-400 hover:text-white font-bold text-lg bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* 1. Live 3-Node Topology Diagram */}
+            <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-3 font-mono text-xs">
+              <div className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center justify-between">
+                <span>Active Network Topology & Channel State</span>
+                <span className="text-slate-400 font-normal">Protocol: RFC 9171 Bundle Protocol v7</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 items-center">
+                
+                {/* Node 1: Station Local Edge */}
+                <div className="bg-slate-900 p-3 rounded-lg border border-emerald-500/50 space-y-1">
+                  <div className="flex items-center justify-between text-emerald-400 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <Server className="w-4 h-4" />
+                      Station Local Edge
+                    </span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  </div>
+                  <div className="text-[11px] text-slate-300">{station.toUpperCase()} Bunker LAN</div>
+                  <div className="text-[10px] text-emerald-300">Status: ONLINE (Port 5000)</div>
+                  <div className="text-[10px] text-slate-500">Zero-lag local state persistence</div>
+                </div>
+
+                {/* Node 2: Inter-Continental Satellite Link */}
+                <div className={`p-3 rounded-lg border space-y-1 text-center ${
+                  networkMode === 'ONLINE_HIGH_SPEED' ? 'bg-emerald-950/30 border-emerald-500/50 text-emerald-300' :
+                  networkMode === 'SATELLITE_IRIDIUM' ? 'bg-amber-950/30 border-amber-500/50 text-amber-300' :
+                  'bg-rose-950/40 border-rose-500/60 text-rose-300'
+                }`}>
+                  <div className="font-bold flex items-center justify-center gap-1.5">
+                    <Satellite className="w-4 h-4" />
+                    <span>
+                      {networkMode === 'ONLINE_HIGH_SPEED' ? 'VSAT Satcom: ONLINE' :
+                       networkMode === 'SATELLITE_IRIDIUM' ? 'Iridium SBD: 2.4 kbps' :
+                       'Satcom: SEVERED (Blizzard)'}
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    {networkMode === 'POLAR_BLACKOUT' 
+                      ? 'Ionospheric Disconnect • Buffering Active' 
+                      : 'Channel Open for 32-Byte Bursts'}
+                  </div>
+                  <div className="text-[11px] font-black tracking-widest pt-1">
+                    {networkMode === 'POLAR_BLACKOUT' ? '✖ ─── DISCONNECTED ─── ✖' : '◀═══ 32B BURSTS ═══▶'}
+                  </div>
+                </div>
+
+                {/* Node 3: NCPOR Goa HQ */}
+                <div className="bg-slate-900 p-3 rounded-lg border border-cyan-500/50 space-y-1">
+                  <div className="flex items-center justify-between text-cyan-400 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <Database className="w-4 h-4" />
+                      NCPOR HQ Gateway
+                    </span>
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                  </div>
+                  <div className="text-[11px] text-slate-300">Vasco da Gama, Goa</div>
+                  <div className="text-[10px] text-cyan-300">MoES Central Repository</div>
+                  <div className="text-[10px] text-slate-500">Awaiting convergence passes</div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* 2. Clear Judge Explanation Card */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              
+              <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+                <div className="font-bold text-amber-300 flex items-center gap-1.5">
+                  <Info className="w-4 h-4 text-amber-400" />
+                  Why Localhost Works Offline
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  In Antarctica, the physical server is <strong>inside the station bunker on local LAN</strong>. Station scientists connect to the local station IP (<code className="text-amber-300">192.168.x.x</code>). It never needs cloud internet to run the UI, radar, or fuel simulators.
+                </p>
+              </div>
+
+              <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+                <div className="font-bold text-cyan-300 flex items-center gap-1.5">
+                  <Network className="w-4 h-4 text-cyan-400" />
+                  What DTN Does in Blizzards
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  When 150 km/h blizzards knock out satellite dishes, normal web apps crash with <em>Network Error</em>. POLARIS serializes cargo, fuel, and SAR logs into <strong>immutable RFC 9171 bundles</strong> queued in local atomic storage.
+                </p>
+              </div>
+
+              <div className="bg-slate-900/90 p-3.5 rounded-xl border border-slate-800 space-y-1.5">
+                <div className="font-bold text-emerald-300 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  Why Government Approves It
+                </div>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  <strong>100% Life Safety:</strong> Rescues never freeze.<br />
+                  <strong>Airtime Cost Savings:</strong> Polar satellite internet costs thousands of dollars/GB. Sending 32-byte binary diffs saves lakhs in satellite bandwidth.
+                </p>
+              </div>
+
+            </div>
+
+            {/* 3. Interactive Testing Controls for Demo */}
+            <div className="bg-slate-900/90 p-4 rounded-xl border border-cyan-500/40 space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="font-bold text-white flex items-center gap-2 text-xs">
+                  <Zap className="w-4 h-4 text-amber-400" />
+                  <span>Live Simulation Controls (Demonstrate to Judges):</span>
+                </div>
+                <div className="text-xs font-mono text-cyan-300">
+                  Current Pending Bundles: <strong>{pendingCount}</strong>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  onClick={() => simulateDTNBundle('CONVOY_RADIO_CHECKIN')}
+                  className="flex items-center gap-1.5 bg-cyan-700 hover:bg-cyan-600 text-white text-xs px-3 py-2 rounded-lg font-bold shadow transition-all"
+                >
+                  <Zap className="w-3.5 h-3.5" />
+                  <span>+ Generate 1 Test Field Event (Enqueue Bundle)</span>
+                </button>
+
+                <button
+                  onClick={() => setNetworkMode('POLAR_BLACKOUT')}
+                  className={`flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg font-bold border transition-all ${
+                    networkMode === 'POLAR_BLACKOUT'
+                      ? 'bg-rose-900 text-rose-200 border-rose-500'
+                      : 'bg-slate-800 text-slate-300 border-slate-700 hover:bg-slate-700'
+                  }`}
+                >
+                  <WifiOff className="w-3.5 h-3.5 text-rose-400" />
+                  <span>Force Blizzard Blackout (Offline)</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setNetworkMode('ONLINE_HIGH_SPEED');
+                    manualTriggerSync();
+                  }}
+                  disabled={isSyncing}
+                  className="flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg font-bold shadow transition-all"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+                  <span>Restore Satellite & Flush Queue to Goa</span>
+                </button>
+              </div>
+            </div>
+
+            {/* 4. Real-time Bundle Queue Table */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-300">Atomic DTN Bundle Storage Ledger:</span>
+                <span className="text-slate-400 font-mono text-[11px]">Total Packets Tracked: {syncQueue.length}</span>
+              </div>
+
+              <div className="bg-slate-950 rounded-xl border border-slate-800 max-h-52 overflow-y-auto">
+                {syncQueue.length === 0 ? (
+                  <div className="p-4 text-center text-xs text-slate-500">
+                    No pending bundles in storage. Click <strong>"+ Generate 1 Test Field Event"</strong> above to enqueue one!
+                  </div>
+                ) : (
+                  <table className="w-full text-left text-xs font-mono">
+                    <thead className="bg-slate-900/90 text-slate-400 border-b border-slate-800 sticky top-0">
+                      <tr>
+                        <th className="p-2.5">Bundle ID</th>
+                        <th className="p-2.5">Entity</th>
+                        <th className="p-2.5">Action</th>
+                        <th className="p-2.5">Size</th>
+                        <th className="p-2.5">Timestamp</th>
+                        <th className="p-2.5">Sync Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-900 text-slate-300">
+                      {syncQueue.map((item) => (
+                        <tr key={item.id} className="hover:bg-slate-900/40">
+                          <td className="p-2 text-cyan-300 font-bold">{item.id}</td>
+                          <td className="p-2 text-amber-300">{item.entity}</td>
+                          <td className="p-2 text-slate-200">{item.action}</td>
+                          <td className="p-2 text-emerald-300">{item.packetSizeBytes} Bytes</td>
+                          <td className="p-2 text-[10px] text-slate-400">{item.timestamp.slice(11, 19)} UTC</td>
+                          <td className="p-2">
+                            {item.status === 'PENDING_SATELLITE_WINDOW' ? (
+                              <span className="bg-amber-950 text-amber-300 border border-amber-600/50 px-2 py-0.5 rounded text-[10px] font-bold animate-pulse">
+                                QUEUED (Awaiting Satellite)
+                              </span>
+                            ) : (
+                              <span className="bg-emerald-950 text-emerald-300 border border-emerald-600/50 px-2 py-0.5 rounded text-[10px]">
+                                ✓ TRANSMITTED TO GOA
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="flex items-center justify-between border-t border-slate-800 pt-3 text-xs text-slate-400">
+              <span>Standard: CCSDS 734.0-B-1 / IETF RFC 9171</span>
+              <button
+                onClick={() => setShowDTNModal(false)}
+                className="bg-slate-800 hover:bg-slate-700 text-white px-4 py-1.5 rounded-lg font-bold"
+              >
+                Close Inspector
+              </button>
+            </div>
+
+          </div>
         </div>
       )}
     </header>

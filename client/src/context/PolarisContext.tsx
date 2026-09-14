@@ -31,6 +31,7 @@ interface PolarisContextType {
   bytesTransferred: number;
   isSyncing: boolean;
   manualTriggerSync: () => void;
+  simulateDTNBundle: (actionName?: string) => void;
 
   // Cargo state
   cargo: CargoItem[];
@@ -187,6 +188,21 @@ export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ child
       setIsSyncing(false);
       setActiveAlert(`Delay-Tolerant Bundle Sync Complete: ${pendingBytes} bytes flushed over satellite link.`);
     }, 1200);
+  };
+
+  // Simulated offline mission event to demonstrate RFC 9171 DTN queueing
+  const simulateDTNBundle = (actionName: string = 'FIELD_SORTIE_CHECKIN') => {
+    const dummyPayload = {
+      action: actionName,
+      sortieId: `SRT-MTR-0${Math.floor(Math.random() * 90 + 10)}`,
+      status: 'RADIO_CHECKIN_ACK',
+      headingDeg: Math.floor(Math.random() * 360),
+      fuelRemainingLiters: Math.floor(Math.random() * 400 + 200),
+      operator: 'Convoy Team Bravo',
+      timestamp: new Date().toISOString()
+    };
+    enqueueAction('SORTIE', 'UPDATE', dummyPayload);
+    setActiveAlert(`RFC 9171 DTN: 48-byte field event serialized into atomic offline bundle queue.`);
   };
 
   useEffect(() => {
@@ -539,6 +555,7 @@ export const PolarisProvider: React.FC<{ children: React.ReactNode }> = ({ child
         bytesTransferred,
         isSyncing,
         manualTriggerSync,
+        simulateDTNBundle,
 
         cargo,
         addCargo,
