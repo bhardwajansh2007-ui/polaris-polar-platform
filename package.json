@@ -1,0 +1,30 @@
+{
+  "name": "polaris-polar-expedition-logistics",
+  "version": "4.2.0",
+  "description": "Integrated Polar Expedition Logistics and Asset Management System for NCPOR (Ministry of Earth Sciences, Govt of India) - SIH Problem Statement 26062",
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "npm run build --prefix client",
+    "postinstall": "npm install --prefix client && npm install --prefix server",
+    "install:all": "npm install --prefix client && npm install --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "dev:server": "node server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  },
+  "keywords": [
+    "polar-logistics",
+    "antarctica",
+    "ncpor",
+    "moes",
+    "smart-automation",
+    "sih2024",
+    "sih",
+    "madrid-protocol",
+    "indian-antarctic-act"
+  ],
+  "author": "SIH Team",
+  "license": "ISC"
+}

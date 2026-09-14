@@ -1,0 +1,14 @@
+{
+  "name": "polaris-edge-server",
+  "version": "4.2.0",
+  "description": "POLARIS Station Edge Server and Delay-Tolerant Sync Gateway (NCPOR / MoES)",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
